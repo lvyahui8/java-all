@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lyh.java.mybatis.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="org.lyh.java.mybatis.model.User" >
+        <!--<id column="id" property="id" jdbcType="INTEGER" />-->
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="salt" property="salt" jdbcType="VARCHAR" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+        <result column="type" property="type" typeHandler="org.lyh.java.mybatis.type.UserTypeHandler"/>
+        <result column="remember_token" property="rememberToken" jdbcType="VARCHAR"/>
+
+        <result column="user_id" property="id" jdbcType="INTEGER"/>
+        <result column="user_username" property="username" jdbcType="VARCHAR"/>
+        <result column="user_password" property="pass" jdbcType="VARCHAR"/>
+        <result column="user_salt" property="salt" jdbcType="VARCHAR" />
+        <result column="user_avatar" property="avatar" jdbcType="VARCHAR" />
+        <result column="user_type" property="type"  typeHandler="org.lyh.java.mybatis.type.UserTypeHandler"/>
+        <result column="user_remember_token" property="rememberToken" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultWithPostsMap" type="org.lyh.java.mybatis.model.User" extends="BaseResultMap">
+        <collection property="posts" ofType="org.lyh.java.mybatis.model.Post"
+                    resultMap="org.lyh.java.mybatis.mapper.PostMapper.BaseResultMap"
+                    column="user_id"
+        />
+    </resultMap>
+
+    <resultMap id="BaseResultSelectPostsMap" type="org.lyh.java.mybatis.model.User" >
+        <collection property="posts" ofType="org.lyh.java.mybatis.model.Post"
+                    select="org.lyh.java.mybatis.mapper.PostMapper.getByUserId"
+                    column="user_id"
+        />
+    </resultMap>
+
+    <select id="getWithPosts" resultMap="BaseResultWithPostsMap">
+        SELECT
+        user.id AS user_id,
+        username,
+        password,
+        salt,
+        avatar,
+        type,
+        remember_token,
+
+        post.id AS post_id,
+        category_id,
+        title,
+        content,
+        created_at,
+        updated_at
+        FROM m_user user
+        LEFT OUTER JOIN m_post post ON user.id = post.user_id
+        WHERE user.id = #{id}
+    </select>
+
+    <select id="getSelectPosts" resultMap="BaseResultSelectPostsMap">
+        SELECT * from m_user WHERE id=#{id}
+    </select>
+</mapper>

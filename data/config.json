@@ -1,0 +1,23 @@
+{
+    "displaySetting" : {
+        "componentWidth" : 2,
+        "backgroundColor" : "#xxxxx"
+    },
+    "menuItems" : [
+        {
+            "title" : "home",
+            "actionUrl" : "/index"
+        }
+    ],
+    "ext" : {
+        "author" : "yahui",
+        "date" : "00",
+        "site" : {
+            "blog" : "movesun",
+            "github" : "lvyahui8"
+        },
+        "commiters" : [
+            "yahui"
+        ]
+    }
+}

@@ -1,0 +1,14 @@
+FROM centos:7
+
+MAINTAINER lvyahui
+
+#foreach($service in $dockerServices)
+#if($service.sourcePath && $service.sourcePath != ''
+&& $service.targetPath && $service.targetPath)
+COPY $service.sourcePath /data/release/$service.targetPath
+#end
+#end
+
+COPY dockerService.sh /data/release/
+
+ENTRYPOINT /data/release/dockerService.sh start && /bin/bash

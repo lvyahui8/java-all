@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+
+## 尽量将数据目录放在母机，通过挂载的方式映射到docker容器
+docker run -it host  \
+#foreach($path in $mountPaths)
+-v $path:$path \
+#end
+$containerName /bin/bash

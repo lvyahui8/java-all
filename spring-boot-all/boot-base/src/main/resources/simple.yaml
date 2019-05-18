@@ -1,0 +1,10 @@
+environments:
+  dev:
+    url:htt://movesun.qq.com
+    name:devlop env
+  prod:
+    url:
+      - http://movesun.com
+      - http://www.movesun.com
+      - hhtp://qianshu.tech
+    name:alibaba server

@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+log_path=/var/log/docker
+mkdir -p ${log_path}
+date_time=`date +"%Y%m%d"`
+log_file=${log_path}/$2-${date_time}.log
+touch ${log_file}
+
+function log() {
+    local message="$1"
+    local ctime=`date +"%Y-%m-%d %H:%M:%S"`
+    #echo "[$ctime] $message"
+    printf "[ %s ] [ %5d ] %s\n" "$ctime" $$ "$message"
+}
+export -f log
+
+function log2file(){
+    local message="$1"
+    local ctime=`date +"%Y-%m-%d %H:%M:%S"`
+    #echo "[$ctime] $message" | tee -a "$log_file"
+    printf "[ %s ] [ %5d ] %s\n" "$ctime" $$ "$message" | tee -a "$log_file"
+}
+export -f log2file
+
+## 首次运行执行的内容，包括目录权限所属修改、数据初始化、hosts文件、crontab等初始化
+function install(){
+    log2file "install docker service"
+}
+
+## 每次docker start 都要执行的命令，用来启动容器内的服务
+function start(){
+    log2file "start docker service"
+}
+
+## 停止容器内的服务
+function stop(){
+    log2file "stop docker service"
+}
+
+## 检查容器内服务状态
+function status() {
+    log2file "check docker service status"
+}
+
+case $1 in
+    install)
+        install
+    ;;
+    start)
+        # 首次启动可能需要先install，再start
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    status)
+        status
+    ;;
+    *)
+        echo "Usage: dockerService.sh [install|start|stop|status]"
+        exit 1
+    ;;
+esac

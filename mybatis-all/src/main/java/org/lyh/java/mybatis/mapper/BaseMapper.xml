@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lyh.java.mybatis.mapper.BaseMapper">
+    <sql id="whereCondition">
+        <if test="conditions != null and conditions.size() > 0">
+            WHERE
+            <foreach item="item" collection="conditions"
+                     open="" separator="AND" close="">
+                <choose>
+                    <when test="item.opt == 'in'">
+                        <if test="item.value != null and item.value.size > 0">
+                            ${item.key} IN
+                            <foreach item="val" collection="item.value"
+                                     open="(" separator="," close=")">
+                                #{val}
+                            </foreach>
+                        </if>
+                    </when>
+                    <when test="item.opt == 'like'">
+                        ${item.key} like '%' || #{item.value} || '%'
+                    </when>
+                    <when test="item.opt == 'like_igcase'">
+                        LOWER(${item.key}) like '%' ||LOWER(#{item.value}) || '%'
+                    </when>
+                    <when test="item.opt == 'between'">
+                        ${item.key} BETWEEN #{item.value[0]} and #{item.value[1]}
+                    </when>
+                    <otherwise>
+                        ${item.key} ${item.opt} #{item.value}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </if>
+    </sql>
+</mapper>
