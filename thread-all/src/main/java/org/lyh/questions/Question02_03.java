@@ -12,7 +12,7 @@ public class Question02_03 {
         private Semaphore semaphore;
         private Semaphore nextSemaphore;
 
-        public Outer(String name, char ch) {
+        Outer(String name, char ch) {
             super(name);
             this.ch = ch;
             this.semaphore = new Semaphore(1);
@@ -32,18 +32,30 @@ public class Question02_03 {
         }
     }
     public static void main(String[] args) {
-        Outer a = new Outer("thread-a",'A');
-        Outer b = new Outer("thread-b",'B');
-        Outer c = new Outer("thread-c",'B');
 
-        a.nextSemaphore = b.semaphore;
-        b.nextSemaphore = c.semaphore;
-        c.nextSemaphore = a.semaphore;
+        Outer headOuter = null,prevOuter = null;
+        int n = 9;
+        for (int i = 0 ; i < n; i ++) {
+            char ch = (char) ('A' + i);
+            Outer outer = new Outer("thread" + ch, ch);
+            if (headOuter == null) {
+                headOuter = outer;
+            }
+            if (prevOuter != null) {
+                prevOuter.nextSemaphore =outer.semaphore;
+            }
+            if (i == n -1) {
+                outer.nextSemaphore = headOuter.semaphore;
+            }
+            try {
+                outer.semaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            outer.start();
+            prevOuter = outer;
+        }
 
-        a.start();
-        b.start();
-        c.start();
-
-        a.semaphore.release();
+        headOuter.semaphore.release();
     }
 }
