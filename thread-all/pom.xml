@@ -32,9 +32,10 @@
         </dependency>
 
         <!--mvn install:install-file -Dfile=D:\library\jcip\jcip-annotations.jar -Dsources=D:\library\jcip\jcip-annotations-src.jar -DgroupId=net.jcip -DartifactId=annotations -Dversion=1.0 -Dpackaging=jar-->
+        <!-- https://mvnrepository.com/artifact/net.jcip/jcip-annotations -->
         <dependency>
             <groupId>net.jcip</groupId>
-            <artifactId>annotations</artifactId>
+            <artifactId>jcip-annotations</artifactId>
             <version>1.0</version>
         </dependency>
 
