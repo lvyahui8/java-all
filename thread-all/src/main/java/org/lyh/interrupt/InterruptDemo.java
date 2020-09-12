@@ -51,3 +51,4 @@ public class InterruptDemo {
         worker.interrupt1();
     }
 }
+
